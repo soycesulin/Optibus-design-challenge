@@ -10,18 +10,18 @@ import {
 } from "@/components/ui/collapsible";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, Sparkles, X } from "lucide-react";
 
 export function BriefingPanel() {
-  const [open, setOpen] = useState(true);
+  const [dismissed, setDismissed] = useState(false);
+  const [expanded, setExpanded] = useState(true);
 
-  if (!open) return null;
+  if (dismissed) return null;
 
   return (
     <Card className="border-slate-200 bg-white shadow-sm">
       <CardContent className="p-4">
-        <Collapsible defaultOpen>
+        <Collapsible open={expanded} onOpenChange={setExpanded}>
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
@@ -54,15 +54,19 @@ export function BriefingPanel() {
                   type="button"
                   className="inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-700"
                 >
-                  <span>Collapse briefing</span>
-                  <ChevronUp className="h-3 w-3" />
+                  <span>{expanded ? "Collapse briefing" : "Expand briefing"}</span>
+                  {expanded ? (
+                    <ChevronUp className="h-3 w-3" aria-hidden />
+                  ) : (
+                    <ChevronDown className="h-3 w-3" aria-hidden />
+                  )}
                 </button>
               </CollapsibleTrigger>
             </div>
             <div className="flex flex-col items-end gap-2">
               <button
                 type="button"
-                onClick={() => setOpen(false)}
+                onClick={() => setDismissed(true)}
                 className="rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
                 aria-label="Dismiss briefing"
               >
@@ -73,8 +77,12 @@ export function BriefingPanel() {
                   type="button"
                   className="mt-auto inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-700"
                 >
-                  <span>Hide details</span>
-                  <ChevronUp className="h-3 w-3" />
+                  <span>{expanded ? "Hide details" : "Show details"}</span>
+                  {expanded ? (
+                    <ChevronUp className="h-3 w-3" aria-hidden />
+                  ) : (
+                    <ChevronDown className="h-3 w-3" aria-hidden />
+                  )}
                 </button>
               </CollapsibleTrigger>
             </div>
