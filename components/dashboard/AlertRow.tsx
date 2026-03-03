@@ -3,7 +3,7 @@
 "use client";
 
 import { Issue, StalenessState } from "@/lib/types";
-import { SeverityBadge } from "@/components/ui/SeverityBadge";
+import { SeverityIcon } from "@/components/ui/SeverityIcon";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { StalePill } from "@/components/ui/StalePill";
 import { formatDueDateRelative } from "@/lib/utils";
@@ -34,16 +34,14 @@ export function AlertRow({ issue, clinicName, assigneeSummary }: AlertRowProps) 
           handleClick();
         }
       }}
-      className="flex w-full items-center gap-4 rounded-lg px-3 py-2 text-left text-xs hover:bg-slate-50"
+      className="flex w-full items-center gap-6 rounded-lg px-3 py-2 text-left text-xs hover:bg-slate-50"
     >
-      <div className="w-28 shrink-0">
-        <SeverityBadge severity={issue.severity} />
+      <div className="shrink-0">
+        <SeverityIcon severity={issue.severity} />
       </div>
-      <div className="flex-1">
-        <div className="flex items-center gap-2">
-          <div className="text-xs font-semibold text-slate-900">
-            {issue.typeCode} · {issue.title}
-          </div>
+      <div className="min-w-0 flex-1">
+        <div className="text-xs font-semibold text-slate-900">
+          {issue.typeCode} · {issue.title}
         </div>
         <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px] text-slate-600">
           <span>{clinicName}</span>
@@ -51,22 +49,18 @@ export function AlertRow({ issue, clinicName, assigneeSummary }: AlertRowProps) 
           <span>{assigneeSummary}</span>
         </div>
       </div>
-      <div className="flex w-48 shrink-0 items-center justify-end gap-3">
-        <div className="flex flex-col items-end gap-1">
-          <StatusBadge status={issue.status} />
-          {issue.stalenessState !== StalenessState.None && (
-            <StalePill state={issue.stalenessState} />
-          )}
-        </div>
-        <div className="text-right">
-          <div
-            className={
-              isUrgent ? "text-[11px] font-semibold text-red-600" : "text-[11px] text-slate-600"
-            }
-          >
-            {label}
-          </div>
-        </div>
+      <div className="flex shrink-0 flex-row flex-nowrap items-center gap-2 whitespace-nowrap">
+        <StatusBadge status={issue.status} />
+        {issue.stalenessState !== StalenessState.None && (
+          <StalePill state={issue.stalenessState} />
+        )}
+        <span
+          className={
+            isUrgent ? "text-[11px] font-semibold text-red-600" : "text-[11px] text-slate-600"
+          }
+        >
+          {label}
+        </span>
         <button
           type="button"
           onClick={(event) => {
@@ -80,4 +74,3 @@ export function AlertRow({ issue, clinicName, assigneeSummary }: AlertRowProps) 
     </div>
   );
 }
-
