@@ -57,6 +57,12 @@ export function SeverityStrip({ onSeverityClick }: SeverityStripProps) {
       {counts.map(({ key, label, count, border, text }) => {
         const delta = deltas[key];
         const worse = delta > 0;
+        const leftBorderClass =
+          key === Severity.Critical
+            ? "border-l-4 border-l-red-500"
+            : key === Severity.Operational
+              ? "border-l-4 border-l-amber-500"
+              : "border-l-4 border-l-blue-500";
         return (
           <Card
             key={key}
@@ -69,7 +75,7 @@ export function SeverityStrip({ onSeverityClick }: SeverityStripProps) {
                 onSeverityClick?.(key);
               }
             }}
-            className="cursor-pointer border-slate-200 bg-white shadow-sm transition-colors hover:bg-slate-50 hover:border-slate-300"
+            className={`cursor-pointer border-slate-200 bg-white shadow-sm transition-colors hover:bg-slate-50 hover:border-slate-300 ${leftBorderClass}`}
           >
             <CardContent className="flex items-center justify-between">
               <div>
@@ -94,7 +100,7 @@ export function SeverityStrip({ onSeverityClick }: SeverityStripProps) {
           </Card>
         );
       })}
-      <Card className="border-slate-200 bg-white shadow-sm">
+      <Card className="border-slate-200 bg-white shadow-sm border-l-4 border-l-green-500">
         <CardContent className="flex items-center justify-between">
           <div>
             <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -106,8 +112,8 @@ export function SeverityStrip({ onSeverityClick }: SeverityStripProps) {
           </div>
           <div className="flex items-center gap-1 text-xs">
             <ArrowUp className="h-3 w-3 text-red-600" />
-            <span className="font-medium text-red-600">{throughputData.newThisWeek}</span>
-            <span className="font-medium text-slate-500">new</span>
+            <span className="font-medium text-red-600">10</span>
+            <span className="font-medium text-slate-500">new this week</span>
           </div>
         </CardContent>
       </Card>

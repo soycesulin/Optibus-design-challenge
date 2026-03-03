@@ -75,30 +75,36 @@ export function RegionalHealthPanel() {
             </div>
           </div>
           <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px]">
-            <span
-              className={cn(
-                PILL_CLASS,
-                "border-red-200 bg-red-50 text-red-700",
-              )}
-            >
-              {row.critical} critical
-            </span>
-            <span
-              className={cn(
-                PILL_CLASS,
-                "border-amber-200 bg-amber-50 text-amber-700",
-              )}
-            >
-              {row.operational} ops
-            </span>
-            <span
-              className={cn(
-                PILL_CLASS,
-                "border-blue-200 bg-blue-50 text-blue-700",
-              )}
-            >
-              {row.minor} minor
-            </span>
+            {row.critical > 0 && (
+              <span
+                className={cn(
+                  PILL_CLASS,
+                  "border-red-200 bg-red-50 text-red-700",
+                )}
+              >
+                {row.critical} critical
+              </span>
+            )}
+            {row.operational > 0 && (
+              <span
+                className={cn(
+                  PILL_CLASS,
+                  "border-amber-200 bg-amber-50 text-amber-700",
+                )}
+              >
+                {row.operational} ops
+              </span>
+            )}
+            {row.minor > 0 && (
+              <span
+                className={cn(
+                  PILL_CLASS,
+                  "border-blue-200 bg-blue-50 text-blue-700",
+                )}
+              >
+                {row.minor} minor
+              </span>
+            )}
           </div>
         </button>
       ))}

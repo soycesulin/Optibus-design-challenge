@@ -86,11 +86,6 @@ export function StaleQueuePanel() {
               return renderItem(item, severity);
             })}
           </div>
-          <div className="flex justify-end">
-            <Button type="button" variant="outline" size="xs" className="h-7 px-3 text-[11px]">
-              Nudge All
-            </Button>
-          </div>
         </div>
       )}
       {nudgedItems.length > 0 && (
@@ -110,11 +105,13 @@ export function StaleQueuePanel() {
               return renderItem(item, severity);
             })}
           </div>
-          <div className="flex justify-end">
-            <Button type="button" variant="outline" size="xs" className="h-7 px-3 text-[11px]">
-              Escalate
-            </Button>
-          </div>
+        </div>
+      )}
+      {(staleItems.length > 0 || nudgedItems.length > 0) && (
+        <div className="flex justify-end">
+          <Button type="button" variant="outline" size="xs" className="h-7 px-3 text-[11px]">
+            Follow up
+          </Button>
         </div>
       )}
     </div>
