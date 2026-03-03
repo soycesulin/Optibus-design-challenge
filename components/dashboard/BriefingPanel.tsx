@@ -68,7 +68,7 @@ export function BriefingPanel() {
   return (
     <div
       ref={containerRef}
-      className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3"
+      className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3"
     >
       {open && (
         <div className="w-[380px] max-h-[480px] overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-xl animate-in slide-in-from-bottom-2">

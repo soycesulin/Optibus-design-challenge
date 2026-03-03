@@ -37,7 +37,7 @@ export function StaleQueuePanel() {
     return (
       <div
         key={issue.id}
-        className="flex w-full items-center gap-6 rounded-md border border-slate-100 px-2 py-2 text-xs"
+        className="flex w-full items-center gap-3 rounded-md border border-slate-100 px-3 py-2 text-xs"
       >
         <div className="shrink-0">
           <SeverityIcon severity={severity} />
@@ -63,55 +63,38 @@ export function StaleQueuePanel() {
   };
 
   const content = (
-    <div className="flex flex-col space-y-4">
+    <div className="flex flex-col space-y-2">
       {staleDelegated.length === 0 && (
         <p className="text-xs text-slate-500">
           No delegated items are currently breaching your staleness thresholds.
         </p>
       )}
       {staleItems.length > 0 && (
-        <div className="flex flex-col space-y-4">
-          <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-            Stale
-          </div>
-          <div className="flex flex-col space-y-2">
-            {staleItems.map((item, index) => {
-              const globalIndex = index;
-              const severity: Severity =
-                globalIndex === 0
-                  ? Severity.Critical
-                  : globalIndex === staleItems.length + nudgedItems.length - 1
-                    ? Severity.Minor
-                    : Severity.Operational;
-              return renderItem(item, severity);
-            })}
-          </div>
+        <div className="flex flex-col space-y-2">
+          {staleItems.map((item, index) => {
+            const globalIndex = index;
+            const severity: Severity =
+              globalIndex === 0
+                ? Severity.Critical
+                : globalIndex === staleItems.length + nudgedItems.length - 1
+                  ? Severity.Minor
+                  : Severity.Operational;
+            return renderItem(item, severity);
+          })}
         </div>
       )}
       {nudgedItems.length > 0 && (
-        <div className="flex flex-col space-y-4">
-          <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-            Nudged
-          </div>
-          <div className="flex flex-col space-y-2">
-            {nudgedItems.map((item, index) => {
-              const globalIndex = staleItems.length + index;
-              const severity: Severity =
-                globalIndex === 0
-                  ? Severity.Critical
-                  : globalIndex === staleItems.length + nudgedItems.length - 1
-                    ? Severity.Minor
-                    : Severity.Operational;
-              return renderItem(item, severity);
-            })}
-          </div>
-        </div>
-      )}
-      {(staleItems.length > 0 || nudgedItems.length > 0) && (
-        <div className="flex justify-end">
-          <Button type="button" variant="outline" size="xs" className="h-7 px-3 text-[11px]">
-            Follow up
-          </Button>
+        <div className="flex flex-col space-y-2">
+          {nudgedItems.map((item, index) => {
+            const globalIndex = staleItems.length + index;
+            const severity: Severity =
+              globalIndex === 0
+                ? Severity.Critical
+                : globalIndex === staleItems.length + nudgedItems.length - 1
+                  ? Severity.Minor
+                  : Severity.Operational;
+            return renderItem(item, severity);
+          })}
         </div>
       )}
     </div>
@@ -126,7 +109,7 @@ export function StaleQueuePanel() {
               Needs Follow-up
             </CardTitle>
             <p className="mt-1 text-xs text-slate-500">
-              Items assigned and pending review.
+              Stale issues pending review.
             </p>
           </div>
           <button
@@ -138,8 +121,15 @@ export function StaleQueuePanel() {
             <Maximize2 className="h-4 w-4" />
           </button>
         </CardHeader>
-        <CardContent className="flex flex-col pt-4">
-          <div className="max-h-[264px] overflow-y-auto">{content}</div>
+        <CardContent className="pt-4">
+          <div className="flex max-h-[192px] flex-col">
+            <div className="flex-1 overflow-y-auto">{content}</div>
+            <div className="mt-2 flex justify-end border-t border-slate-100 bg-white py-2 px-3">
+              <Button type="button" variant="outline" size="xs" className="h-7 px-3 text-[11px]">
+                Nudge all
+              </Button>
+            </div>
+          </div>
         </CardContent>
       </Card>
       <Dialog open={expandOpen} onOpenChange={setExpandOpen}>

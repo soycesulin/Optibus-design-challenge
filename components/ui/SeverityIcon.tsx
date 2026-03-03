@@ -13,22 +13,20 @@ export function SeverityIcon({ severity }: SeverityIconProps) {
   const isOperational = severity === Severity.Operational;
 
   const classes = isCritical
-    ? "border-red-200 bg-red-50 text-red-700"
+    ? "text-red-600"
     : isOperational
-      ? "border-amber-200 bg-amber-50 text-amber-700"
-      : "border-blue-200 bg-blue-50 text-blue-700";
+      ? "text-amber-600"
+      : "text-blue-600";
 
   const Icon = isCritical ? AlertTriangle : isOperational ? AlertCircle : Info;
 
   return (
     <span
-      className={cn(
-        "inline-flex size-6 shrink-0 items-center justify-center rounded-full border",
-        classes,
-      )}
+      className={cn("inline-flex shrink-0 items-center justify-center", classes)}
       aria-hidden
     >
-      <Icon className="size-[14px]" strokeWidth={2.5} />
+      <Icon className="h-4 w-4" strokeWidth={2.5} />
     </span>
   );
 }
+

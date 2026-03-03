@@ -1,7 +1,7 @@
 // Status pill indicating the workflow state of an issue
 
 import { IssueStatus } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { StatusPill, StatusPillVariant } from "@/components/ui/StatusPill";
 
 interface StatusBadgeProps {
   status: IssueStatus;
@@ -15,24 +15,14 @@ export function StatusBadge({ status }: StatusBadgeProps) {
     [IssueStatus.Resolved]: "Resolved",
   };
 
-  const classes =
-    status === IssueStatus.Flagged
-      ? "bg-slate-100 text-slate-600"
-      : status === IssueStatus.Delegated
-      ? "bg-violet-50 text-violet-700"
-      : status === IssueStatus.InReview
-      ? "bg-yellow-50 text-yellow-700"
-      : "bg-green-50 text-green-700";
+  const variantMap: Record<IssueStatus, StatusPillVariant> = {
+    [IssueStatus.Flagged]: StatusPillVariant.Flagged,
+    [IssueStatus.Delegated]: StatusPillVariant.Delegated,
+    [IssueStatus.InReview]: StatusPillVariant.InReview,
+    [IssueStatus.Resolved]: StatusPillVariant.Resolved,
+  };
 
-  return (
-    <span
-      className={cn(
-        "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium",
-        classes,
-      )}
-    >
-      {labelMap[status]}
-    </span>
-  );
+  return <StatusPill label={labelMap[status]} variant={variantMap[status]} />;
 }
+
 

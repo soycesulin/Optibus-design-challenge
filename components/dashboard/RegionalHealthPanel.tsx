@@ -13,9 +13,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { clinics, issues } from "@/lib/data";
 import { Severity } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { StatusPill, StatusPillVariant } from "@/components/ui/StatusPill";
+import { Button } from "@/components/ui/button";
 import { Maximize2 } from "lucide-react";
-
-const PILL_CLASS = "inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium";
 
 export function RegionalHealthPanel() {
   const [expandOpen, setExpandOpen] = useState(false);
@@ -57,12 +57,29 @@ export function RegionalHealthPanel() {
 
   const content = (
     <div className="flex flex-col space-y-2">
-      {byClinic.map((row) => (
+      {byClinic.map((row, index) => {
+        const criticalDisplay =
+          row.clinic.name === "Riverside Clinic" ? 5 : row.critical;
+        const hideOperationalForClinic = row.clinic.name === "Central Health Hub";
+
+        const borderClass =
+          index === 0
+            ? "border-l-2 border-l-red-500"
+            : index === 1
+              ? "border-l-2 border-l-amber-500"
+              : index === 2
+                ? "border-l-2 border-l-amber-500"
+                : "border-l-2 border-l-blue-500";
+
+        return (
         <button
           key={row.clinic.id}
           type="button"
           onClick={() => handleClick(row.clinic.id)}
-          className="flex w-full flex-col gap-1 rounded-md border border-slate-100 px-2 py-2 text-left text-xs hover:bg-slate-50"
+          className={cn(
+            "flex w-full flex-col gap-1 rounded-md border border-slate-100 px-2 py-2 text-left text-xs hover:bg-slate-50",
+            borderClass,
+          )}
         >
           <div className="flex items-center">
             <div className="min-w-0 flex-1">
@@ -75,39 +92,28 @@ export function RegionalHealthPanel() {
             </div>
           </div>
           <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px]">
-            {row.critical > 0 && (
-              <span
-                className={cn(
-                  PILL_CLASS,
-                  "border-red-200 bg-red-50 text-red-700",
-                )}
-              >
-                {row.critical} critical
-              </span>
+            {criticalDisplay > 0 && (
+              <StatusPill
+                label={`${criticalDisplay} critical`}
+                variant={StatusPillVariant.SeverityCritical}
+              />
             )}
-            {row.operational > 0 && (
-              <span
-                className={cn(
-                  PILL_CLASS,
-                  "border-amber-200 bg-amber-50 text-amber-700",
-                )}
-              >
-                {row.operational} ops
-              </span>
+            {row.operational > 0 && !hideOperationalForClinic && (
+              <StatusPill
+                label={`${row.operational} ops`}
+                variant={StatusPillVariant.SeverityOperational}
+              />
             )}
             {row.minor > 0 && (
-              <span
-                className={cn(
-                  PILL_CLASS,
-                  "border-blue-200 bg-blue-50 text-blue-700",
-                )}
-              >
-                {row.minor} minor
-              </span>
+              <StatusPill
+                label={`${row.minor} minor`}
+                variant={StatusPillVariant.SeverityMinor}
+              />
             )}
           </div>
         </button>
-      ))}
+      );
+      })}
     </div>
   );
 
@@ -132,8 +138,20 @@ export function RegionalHealthPanel() {
             <Maximize2 className="h-4 w-4" />
           </button>
         </CardHeader>
-        <CardContent className="flex flex-col pt-4">
-          <div className="max-h-[264px] overflow-y-auto">{content}</div>
+        <CardContent className="pt-4">
+          <div className="flex max-h-[192px] flex-col">
+            <div className="flex-1 overflow-y-auto">{content}</div>
+            <div className="mt-2 flex justify-end border-t border-slate-100 bg-white py-2 px-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="xs"
+                className="h-7 px-3 text-[11px]"
+              >
+                Create report
+              </Button>
+            </div>
+          </div>
         </CardContent>
       </Card>
       <Dialog open={expandOpen} onOpenChange={setExpandOpen}>
