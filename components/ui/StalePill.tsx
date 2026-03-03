@@ -1,32 +1,26 @@
 // Staleness indicator pill for delegated issues needing follow-up
 
-import { Clock3, BellRing } from "lucide-react";
 import { StalenessState } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { StatusPill, StatusPillVariant } from "@/components/ui/StatusPill";
 
 interface StalePillProps {
   state: StalenessState;
+  /** Number of days since delegation / last nudge, derived from seed dates. */
+  days: number;
 }
 
-export function StalePill({ state }: StalePillProps) {
+export function StalePill({ state, days }: StalePillProps) {
   if (state === StalenessState.None) return null;
 
   const isNudged = state === StalenessState.Nudged;
-  const label = isNudged ? "Nudged" : "Stale";
-  const Icon = isNudged ? BellRing : Clock3;
+  const label = isNudged ? `Nudged · ${days}d ago` : `Stale · ${days}d`;
 
   return (
-    <span
-      className={cn(
-        "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium",
-        isNudged
-          ? "border-purple-300 bg-purple-100 text-purple-700"
-          : "border-amber-200 bg-amber-100 text-amber-700",
-      )}
-    >
-      <Icon className="h-3 w-3" />
-      {label}
-    </span>
+    <StatusPill
+      label={label}
+      variant={isNudged ? StatusPillVariant.Nudged : StatusPillVariant.Stale}
+    />
   );
 }
+
 

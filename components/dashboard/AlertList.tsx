@@ -27,9 +27,14 @@ const SEVERITY_LABEL: Record<Severity, string> = {
 interface AlertListProps {
   scrollToSeverity?: Severity | null;
   onScrollToSeverityConsumed?: () => void;
+  onIssueClick?: (issueId: string) => void;
 }
 
-export function AlertList({ scrollToSeverity, onScrollToSeverityConsumed }: AlertListProps) {
+export function AlertList({
+  scrollToSeverity,
+  onScrollToSeverityConsumed,
+  onIssueClick,
+}: AlertListProps) {
   const [openGroups, setOpenGroups] = useState<Record<Severity, boolean>>({
     [Severity.Critical]: true,
     [Severity.Operational]: true,
@@ -80,6 +85,7 @@ export function AlertList({ scrollToSeverity, onScrollToSeverityConsumed }: Aler
         issue={issue}
         clinicName={clinic?.name ?? "Unknown clinic"}
         assigneeSummary={assigneeSummary}
+        onClick={onIssueClick}
       />
     );
   };

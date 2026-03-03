@@ -33,60 +33,40 @@ export function UpcomingRisksPanel() {
     grouped[horizonLabel(risk.daysUntilBreach)].push(risk);
   }
 
-  const sections: {
-    key: keyof typeof grouped;
-    title: string;
-  }[] = [
-    { key: "thisWeek", title: "This week" },
-    { key: "nextTwoWeeks", title: "Next 2 weeks" },
-    { key: "thisMonth", title: "This month" },
-  ];
-
   const content = (
-    <div className="flex flex-col space-y-4">
-      {sections.map((section) => {
-        const items = grouped[section.key];
-        if (!items.length) return null;
+    <div className="flex flex-col space-y-2">
+      {(["thisWeek", "nextTwoWeeks", "thisMonth"] as const).flatMap((key) =>
+        grouped[key],
+      ).map((risk) => {
+        const clinic = byClinic[risk.clinicId];
+        const days = risk.daysUntilBreach;
+        const urgent = days <= 7;
+        const soon = days <= 14;
+        const chipClass = urgent
+          ? "bg-red-50 text-red-700 border-red-200"
+          : soon
+            ? "bg-amber-50 text-amber-700 border-amber-200"
+            : "bg-slate-100 text-slate-700 border-slate-200";
         return (
-          <div key={section.key} className="flex flex-col space-y-4">
-            <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-              {section.title}
+          <div
+            key={risk.id}
+            className="flex items-start justify-between gap-3 rounded-md border border-slate-100 px-2 py-2 text-xs"
+          >
+            <div className="min-w-0 flex-1">
+              <div className="font-medium text-slate-900">
+                {risk.issueTypeCode} · {risk.title}
+              </div>
+              <div className="mt-0.5 flex flex-wrap items-center gap-2 text-[11px] text-slate-600">
+                <span>{clinic?.name}</span>
+                <span className="text-slate-400">·</span>
+                <span>{risk.affectedPerson}</span>
+              </div>
             </div>
-            <div className="flex flex-col space-y-2">
-              {items.map((risk) => {
-                const clinic = byClinic[risk.clinicId];
-                const days = risk.daysUntilBreach;
-                const urgent = days <= 7;
-                const soon = days <= 14;
-                const chipClass = urgent
-                  ? "bg-red-50 text-red-700 border-red-200"
-                  : soon
-                    ? "bg-amber-50 text-amber-700 border-amber-200"
-                    : "bg-slate-100 text-slate-700 border-slate-200";
-                return (
-                  <div
-                    key={risk.id}
-                    className="flex items-start justify-between gap-3 rounded-md border border-slate-100 px-2 py-2 text-xs"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <div className="font-medium text-slate-900">
-                        {risk.issueTypeCode} · {risk.title}
-                      </div>
-                      <div className="mt-0.5 flex flex-wrap items-center gap-2 text-[11px] text-slate-600">
-                        <span>{clinic?.name}</span>
-                        <span className="text-slate-400">·</span>
-                        <span>{risk.affectedPerson}</span>
-                      </div>
-                    </div>
-                    <span
-                      className={`inline-flex shrink-0 items-center rounded-full border px-2 py-0.5 text-[11px] font-medium ${chipClass}`}
-                    >
-                      {days} days
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
+            <span
+              className={`inline-flex shrink-0 items-center rounded-full border px-2 py-0.5 text-[11px] font-medium ${chipClass}`}
+            >
+              {days} days
+            </span>
           </div>
         );
       })}
@@ -112,8 +92,18 @@ export function UpcomingRisksPanel() {
             <Maximize2 className="h-4 w-4" />
           </button>
         </CardHeader>
-        <CardContent className="flex flex-col pt-4">
-          <div className="max-h-[264px] overflow-y-auto">{content}</div>
+        <CardContent className="pt-4">
+          <div className="flex max-h-[192px] flex-col">
+            <div className="flex-1 overflow-y-auto">{content}</div>
+            <div className="mt-2 flex justify-end border-t border-slate-100 bg-white py-2 px-3">
+              <button
+                type="button"
+                className="h-7 rounded-md border border-slate-200 px-3 text-[11px] font-medium text-slate-700 hover:bg-slate-50"
+              >
+                Assign all
+              </button>
+            </div>
+          </div>
         </CardContent>
       </Card>
       <Dialog open={expandOpen} onOpenChange={setExpandOpen}>

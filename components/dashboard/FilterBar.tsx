@@ -1,5 +1,8 @@
 // Filter bar with Select dropdowns for the alert list
 
+"use client";
+
+import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -9,18 +12,29 @@ import {
 } from "@/components/ui/select";
 import { Filter } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { FilterChip } from "@/components/ui/FilterChip";
 
 interface FilterBarProps {
   /** When true, renders without outer border/shadow (e.g. inside a card) */
   inline?: boolean;
 }
 
-const REGION_OPTIONS = ["All regions", "North District", "East District", "Central District"];
+const REGION_OPTIONS = ["All Clinics", "North District", "East District", "Central District"];
 const ISSUE_TYPE_OPTIONS = ["All types", "EXP-LIC-01", "TRN-HIPAA-01", "HR-FILE-01"];
 const STATUS_OPTIONS = ["All statuses", "Flagged", "Delegated", "In Review", "Resolved"];
 const DUE_DATE_OPTIONS = ["Any", "Overdue", "Next 7 days", "Next 30 days"];
 
 export function FilterBar({ inline }: FilterBarProps) {
+  const [quickFilters, setQuickFilters] = useState({
+    expired: false,
+    stale: false,
+    delegated: false,
+  });
+
+  const toggleQuick = (key: "expired" | "stale" | "delegated") => {
+    setQuickFilters((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
   return (
     <div
       className={cn(
@@ -81,6 +95,23 @@ export function FilterBar({ inline }: FilterBarProps) {
           ))}
         </SelectContent>
       </Select>
+      <div className="flex items-center gap-2">
+        <FilterChip
+          label="Expired"
+          selected={quickFilters.expired}
+          onClick={() => toggleQuick("expired")}
+        />
+        <FilterChip
+          label="Stale"
+          selected={quickFilters.stale}
+          onClick={() => toggleQuick("stale")}
+        />
+        <FilterChip
+          label="Delegated"
+          selected={quickFilters.delegated}
+          onClick={() => toggleQuick("delegated")}
+        />
+      </div>
     </div>
   );
 }
